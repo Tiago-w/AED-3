@@ -49,4 +49,4 @@ meu_trabalho/
 3. O programa vai ler a matriz do arquivo correspondente. O custo ótimo já está embutido no código (baseado no nome do arquivo).
 4. Para cada execução, o programa irá calcular e registrar na tela o tempo de execução e o custo da solução final.
 5. Será também exibido o gap (diferença em porcentagem) da qualidade da solução do algoritmo aproximativo em relação ao custo ótimo fornecido.
-"# AED-3" 
+
