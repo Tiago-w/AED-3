@@ -1,40 +1,21 @@
-# Trabalho Prático: Problema do Caixeiro Viajante (TSP) Euclidiano
+# Trabalho Prático: Problema do Caixeiro Viajante (TSP)
 
-Este arquivo contém as instruções passo a passo para compilar e executar o código desenvolvido para a solução do Problema do Caixeiro Viajante (TSP). O programa lê matrizes de adjacência fornecidas e calcula a rota utilizando duas abordagens distintas: um algoritmo aproximativo (heurística do vizinho mais próximo) e um algoritmo exato (força bruta).
+Programa desenvolvido em C para resolução do Problema do Caixeiro Viajante utilizando:
 
-## Dependências
-O código foi desenvolvido inteiramente em C e não possui dependências externas ou bibliotecas adicionais que precisem de instalação. Utiliza apenas as bibliotecas padrão da linguagem (stdio.h, stdlib.h, string.h e time.h). É apenas necessário ter um compilador C (como o GCC) instalado no sistema.
+* **Algoritmo aproximativo:** heurística do vizinho mais próximo.
+* **Algoritmo Exato (força bruta):** busca recursiva com backtracking.
 
+O programa calcula o custo da solução, tempo de execução e gap em relação ao valor ótimo conhecido.
 
+## Estrutura
 
-## Instruções de Compilação
-No terminal, navegue até a pasta onde se encontra o código-fonte (por exemplo, a pasta src) e execute o comando de compilação:
+Os arquivos devem estar organizados da seguinte forma:
 
-
-gcc main.c -o tsp
-
-Este comando vai gerar um arquivo executável chamado tsp.
-
-## Instruções de Execução
-Com o código compilado, execute o programa a partir do terminal:
-
-**Em ambiente Linux**
-
-./tsp
-
-
-**Em ambiente Windows:**
-
-tsp.exe
-
-
-## Estrutura de Arquivos
-Para evitar erros de leitura ("Erro ao abrir o arquivo."), observe para manter a organização das pastas. O código (main.c) utiliza caminhos relativos (../docs/) para procurar os arquivos de texto. A estrutura deve ser semelhante a esta:
 
 ```text
 meu_trabalho/
 ├── src/
-│   └── main.c             
+│   └── main.c
 └── docs/
     ├── tsp1_253.txt
     ├── tsp2_1248.txt
@@ -43,10 +24,57 @@ meu_trabalho/
     └── tsp5_27603.txt
 ```
 
-## Como utilizar o programa
-1. Ao iniciar, será apresentado um menu com as opções de arquivos a testar (opções 1 a 5).
-2. Digite o número da instância desejada e pressione enter.
-3. O programa vai ler a matriz do arquivo correspondente. O custo ótimo já está embutido no código (baseado no nome do arquivo).
-4. Para cada execução, o programa irá calcular e registrar na tela o tempo de execução e o custo da solução final.
-5. Será também exibido o gap (diferença em porcentagem) da qualidade da solução do algoritmo aproximativo em relação ao custo ótimo fornecido.
+O programa utiliza o caminho relativo ../docs/ para acessar os arquivos.
 
+## Dependências
+
+É necessário apenas um compilador C, como o GCC.
+
+Bibliotecas utilizadas:
+
+stdio.h
+stdlib.h
+time.h
+
+## Compilação
+
+Na pasta src:
+
+
+gcc main.c -o tsp
+
+
+## Execução
+
+Na mesma pasta da compilação:
+
+### Linux
+
+
+./tsp
+
+
+### Windows
+
+tsp
+
+## Funcionamento
+
+Ao executar, selecione uma das opções disponíveis no menu.
+
+Para cada instância, o programa executa o algoritmo aproximativo e o algortimo exato, apresentando:
+
+* valor ótimo conhecido;
+* custo encontrado;
+* tempo de execução;
+* gap da solução.
+
+A força bruta é interrompida caso ultrapasse **10 segundos** de execução.
+
+## Gap
+
+O gap é calculado por:
+
+Gap = ((custo encontrado - valor ótimo) / valor ótimo) × 100
+
+Um gap de 0% indica que o custo encontrado é igual ao valor ótimo conhecido.

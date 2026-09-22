@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <time.h>
 
 int **ler_arquivo(const char *caminho_arquivo, int *numero_vertices_colunas)
@@ -57,7 +56,9 @@ int algoritmo_aproximativo(int **matriz, int n)
     int visitados[n];
 
     for (int i = 0; i < n; i++)
+    {
         visitados[i] = 0;
+    }
 
     int cidade_atual = 0;
     int custo_total = 0;
@@ -97,39 +98,50 @@ int algoritmo_forca_bruta(
     int cidade_atual,
     int custo_atual,
     int quantidade_visitados,
-    int *visitados)
+    int *visitados, clock_t tempo_inicio, int limite_segundos, int *estourou)
 {
+
+    clock_t tempo_atual = clock();
+    if ((int)(tempo_atual - tempo_inicio) / CLOCKS_PER_SEC > limite_segundos)
+    {
+        *estourou = 1;
+        return 9999999;
+    }
+
+    // todas as cidades foram visitadas
     if (quantidade_visitados == n)
     {
         return custo_atual + matriz[cidade_atual][0];
     }
 
-    int menor = 9999999;
+    int menor_custo = 9999999;
 
+    // testa todas as cidades ainda não visitadas
     for (int i = 0; i < n; i++)
     {
         if (visitados[i] == 0)
         {
             visitados[i] = 1;
 
-            int resultado = algoritmo_forca_bruta(
+            int custo = algoritmo_forca_bruta(
                 matriz,
                 n,
                 i,
                 custo_atual + matriz[cidade_atual][i],
                 quantidade_visitados + 1,
-                visitados);
+                visitados, tempo_inicio, limite_segundos, estourou);
 
-            if (resultado < menor)
+            if (custo < menor_custo)
             {
-                menor = resultado;
+                menor_custo = custo;
             }
 
+            // desfaz a escolha para testar outra possibilidade
             visitados[i] = 0;
         }
     }
 
-    return menor;
+    return menor_custo;
 }
 
 int main()
@@ -195,7 +207,6 @@ int main()
 
     visitados[0] = 1;
 
-
     if (matriz == NULL)
     {
         printf("Erro de leitura.\n");
@@ -208,7 +219,6 @@ int main()
 
     clock_t inicio = clock();
     int resultado_aproximado = algoritmo_aproximativo(matriz, numeros_vc);
-
     clock_t fim = clock();
     double tempo_aproximativo = (double)(fim - inicio) / CLOCKS_PER_SEC;
 
@@ -223,13 +233,27 @@ int main()
     printf(".........................................\n\n");
 
     printf("Calculando algoritmo forca bruta...\n");
+
+    for (int i = 0; i < numeros_vc; i++)
+    {
+        visitados[i] = 0;
+    }
+
+    visitados[0] = 1;
+
+    int estourou = 0;
+    int limite_segundos = 10;
+
     clock_t inicioo = clock();
-    int resultado_forca_bruta = algoritmo_forca_bruta(matriz, numeros_vc, 0, 0, 1, visitados);
-
+    int resultado_forca_bruta = algoritmo_forca_bruta(matriz, numeros_vc, 0, 0, 1, visitados, inicioo, limite_segundos, &estourou);
     clock_t fimm = clock();
-    double tempo_forca_bruta = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    double tempo_forca_bruta = (double)(fimm - inicioo) / CLOCKS_PER_SEC;
 
-    //cálculo gap
+
+    if(estourou==1){
+        printf("\033[1;31m""Programa abortado: excedeu 10 segundos.\n""\033[0m");
+    }
+    // cálculo gap
     double gap_forca_bruta;
 
     gap_forca_bruta = ((double)(resultado_forca_bruta - otimo) / otimo) * 100;
@@ -238,6 +262,19 @@ int main()
     printf("Custo e tempo com algortimo forca bruta (respectivamente): %d, %f\n", resultado_forca_bruta, tempo_forca_bruta);
     printf("Gap: %.2f%%\n", gap_forca_bruta);
     printf(".........................................\n");
+
+
+    int op;
+
+    printf("Impimir matriz selecionada?\n");
+    printf("1 - sim\n");
+    printf("2 - nao\n");
+    scanf("%d", &op);
+
+    if (op==2){
+        return 0;
+        free(matriz);
+    }
 
     printf("Matriz:");
 
@@ -252,5 +289,6 @@ int main()
 
     printf("\n");
 
+    free(matriz);
     return 0;
 }
