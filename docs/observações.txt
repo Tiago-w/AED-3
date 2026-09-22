@@ -1,0 +1,1 @@
+falta: ver o que fazer pra parar de ficar executando pra sempre algortimo de força bruta, como estabelecer o limite
